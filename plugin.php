@@ -41,11 +41,14 @@ Copyright 2015 laemmi
 if(!defined('YOURLS_ABSPATH'))die();
 
 if (!yourls_is_API()) {
-
-    require_once 'lib/Plugin.php';
-
-    new Laemmi\Yourls\Comment\Label\Plugin([
-        'db' => $ydb,
-        'allowed_groups' => defined('LAEMMI_EASY_LDAP_ALLOWED_GROUPS') ? json_decode(LAEMMI_EASY_LDAP_ALLOWED_GROUPS, true) : [],
-    ]);
+    // Check if AbstractDefault class exists
+    if(class_exists('Laemmi\Yourls\Plugin\AbstractDefault')) {
+        require_once 'lib/Plugin.php';
+        new Laemmi\Yourls\Comment\Label\Plugin([
+            'db' => $ydb,
+            'allowed_groups' => defined('LAEMMI_EASY_LDAP_ALLOWED_GROUPS') ? json_decode(LAEMMI_EASY_LDAP_ALLOWED_GROUPS, true) : [],
+        ]);
+    } else {
+        echo 'Please install "laemmi-yourls-default-tools" first!';
+    }
 }

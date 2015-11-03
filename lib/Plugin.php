@@ -32,17 +32,12 @@
  */
 namespace Laemmi\Yourls\Comment\Label;
 
-/**
- * Class AbstractDefault
- */
-require_once 'Plugin/AbstractDefault.php';
-
 use Laemmi\Yourls\Plugin\AbstractDefault;
 
 /**
  * Class Plugin
  *
- * @package Laemmi\Yourls\Bind\User\To\Entry
+ * @package Laemmi\Yourls\Comment\Label
  */
 class Plugin extends AbstractDefault
 {
