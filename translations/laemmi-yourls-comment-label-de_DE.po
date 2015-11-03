@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2015-11-03 10:20+0100\n"
-"PO-Revision-Date: 2015-11-03 10:21+0100\n"
+"PO-Revision-Date: 2015-11-03 11:46+0100\n"
 "Last-Translator: Michael Lämmlein <m.laemmlein@wdv.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -33,7 +33,7 @@ msgstr "Kommentar & Stichworte bearbeiten"
 
 #: lib/Plugin.php:315
 msgid "Comment"
-msgstr "Kommetar"
+msgstr "Kommentar"
 
 #: lib/Plugin.php:316
 msgid "Label"

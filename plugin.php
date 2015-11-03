@@ -45,6 +45,7 @@ if (!yourls_is_API()) {
     require_once 'lib/Plugin.php';
 
     new Laemmi\Yourls\Comment\Label\Plugin([
-        'db' => $ydb
+        'db' => $ydb,
+        'allowed_groups' => defined('LAEMMI_EASY_LDAP_ALLOWED_GROUPS') ? json_decode(LAEMMI_EASY_LDAP_ALLOWED_GROUPS, true) : [],
     ]);
 }

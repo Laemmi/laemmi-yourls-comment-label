@@ -58,6 +58,14 @@ class Plugin extends AbstractDefault
     const SETTING_URL_LABEL = 'laemmi_label';
 
     /**
+     * Permission constants
+     */
+    const PERMISSION_ACTION_EDIT_COMMENT = 'action-edit-comment';
+    const PERMISSION_ACTION_EDIT_LABEL = 'action-edit-label';
+    const PERMISSION_LIST_SHOW_COMMENT = 'list-show-comment';
+    const PERMISSION_LIST_SHOW_LABEL = 'list-show-label';
+
+    /**
      * Settings for url table
      *
      * @var array
@@ -66,6 +74,38 @@ class Plugin extends AbstractDefault
         self::SETTING_URL_COMMENT => ["field" => "TEXT"],
         self::SETTING_URL_LABEL => ["field" => "TEXT"]
     ];
+
+    /**
+     * Options
+     *
+     * @var array
+     */
+    protected $_options = [
+        'allowed_groups' => []
+    ];
+
+    /**
+     * Admin permissions
+     *
+     * @var array
+     */
+    protected $_adminpermission = [
+        self::PERMISSION_ACTION_EDIT_COMMENT,
+        self::PERMISSION_ACTION_EDIT_LABEL,
+        self::PERMISSION_LIST_SHOW_COMMENT,
+        self::PERMISSION_LIST_SHOW_LABEL
+    ];
+
+    /**
+     * Constructor
+     *
+     * @param array $options
+     */
+    public function __construct(array $options = [])
+    {
+        $this->startSession();
+        parent::__construct($options);
+    }
 
     ####################################################################################################################
 
@@ -144,21 +184,32 @@ class Plugin extends AbstractDefault
     {
         list($insert, $url, $keyword, $title, $timestamp, $ip) = $args;
 
-        $comment = $this->getRequest('comment');
-        $label = $this->getRequest('label');
+        $permissions = $this->helperGetAllowedPermissions();
 
-        $label = explode(',', $label);
-        $label = array_map('trim', $label);
-        $label = array_map('strtolower', $label);
-        $label = array_filter($label);
-        $label = array_unique($label);
-        natsort($label);
-        $label = json_encode($label);
+        $data = [];
 
-        $this->updateUrlSetting([
-            self::SETTING_URL_COMMENT => $comment,
-            self::SETTING_URL_LABEL => $label,
-        ], $keyword);
+        if(isset($permissions[self::PERMISSION_ACTION_EDIT_COMMENT])) {
+            $comment = $this->getRequest('comment');
+            $data[self::SETTING_URL_COMMENT] = $comment;
+        }
+
+        if(isset($permissions[self::PERMISSION_ACTION_EDIT_LABEL])) {
+            $label = $this->getRequest('label');
+            $label = explode(',', $label);
+            $label = array_map('trim', $label);
+            $label = array_map('strtolower', $label);
+            $label = array_filter($label);
+            $label = array_unique($label);
+            natsort($label);
+            $label = json_encode($label);
+            $data[self::SETTING_URL_LABEL] = $label;
+        }
+
+        if(!$data) {
+            return;
+        }
+
+        $this->updateUrlSetting($data, $keyword);
     }
 
     /**
@@ -226,40 +277,6 @@ class Plugin extends AbstractDefault
 
     ####################################################################################################################
 
-
-//    public function filter_table_edit_row___()
-//    {
-//        list($return, $keyword, $url, $title) = func_get_args();
-//
-//        $doc = new \DOMDocument();
-//        $doc->loadHTML($return, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-//
-//        $infos = yourls_get_keyword_infos($keyword);
-//
-//        $td = $doc->getElementsByTagName('td');
-//
-//        $div = $doc->createElement('div');
-//        $element = $doc->createElement('textarea', nl2br($infos[self::SETTING_URL_COMMENT]));
-//        $element->setAttribute('name', 'comment');
-//        $div->appendChild($doc->createElement('strong', 'Comment:'));
-//        $div->appendChild($element);
-//        $td[0]->appendChild($div);
-//
-//        $div = $doc->createElement('div');
-//        $element = $doc->createElement('input');
-//        $element->setAttribute('type', 'text');
-//        $element->setAttribute('class', 'text');
-//        $element->setAttribute('name', 'label');
-//        $element->setAttribute('value', @implode(',',@json_decode($infos[self::SETTING_URL_LABEL])));
-//        $div->appendChild($doc->createElement('strong', 'Label:'));
-//        $div->appendChild($element);
-//        $td[0]->appendChild($div);
-//
-//        $return = $doc->saveHTML();
-//
-//        return $return;
-//    }
-
     /**
      * Filter table_add_row_action_array
      *
@@ -268,6 +285,12 @@ class Plugin extends AbstractDefault
     public function filter_table_add_row_action_array()
     {
         list($actions) = func_get_args();
+
+        $permissions = $this->helperGetAllowedPermissions();
+
+        if(! isset($permissions[self::PERMISSION_ACTION_EDIT_COMMENT]) && ! isset($permissions[self::PERMISSION_ACTION_EDIT_LABEL])) {
+            return $actions;
+        }
 
         global $keyword;
 
@@ -299,47 +322,29 @@ class Plugin extends AbstractDefault
             return $cells;
         }
 
-        $label = json_decode($url_result->{self::SETTING_URL_LABEL}, true);
-        $label = @implode('</span><span>', $label);
+        $permissions = $this->helperGetAllowedPermissions();
 
-        if($label) {
-            $cells['url']['template'] .= '<div class="laemmi_label"><span>%laemmi_label%</span></div>';
-            $cells['url']['laemmi_label'] = $label;
+        if(isset($permissions[self::PERMISSION_LIST_SHOW_LABEL])) {
+            $label = json_decode($url_result->{self::SETTING_URL_LABEL}, true);
+            $label = @implode('</span><span>', $label);
+
+            if ($label) {
+                $cells['url']['template'] .= '<div class="laemmi_label"><span>%laemmi_label%</span></div>';
+                $cells['url']['laemmi_label'] = $label;
+            }
         }
 
-        $comment = trim($url_result->{self::SETTING_URL_COMMENT});
-
-        if($comment) {
-            $cells['url']['template'] .= '<dl class="laemmi_comment"><dt><a href="#">%laemmi_comment_title%</a></dt><dd>%laemmi_comment%</dd></dl>';
-            $cells['url']['laemmi_comment_title'] = yourls__('Comment', self::LOCALIZED_DOMAIN);
-            $cells['url']['laemmi_comment'] = $comment;
+        if(isset($permissions[self::PERMISSION_LIST_SHOW_COMMENT])) {
+            $comment = trim($url_result->{self::SETTING_URL_COMMENT});
+            if($comment) {
+                $cells['url']['template'] .= '<dl class="laemmi_comment"><dt><a href="#">%laemmi_comment_title%</a></dt><dd>%laemmi_comment%</dd></dl>';
+                $cells['url']['laemmi_comment_title'] = yourls__('Comment', self::LOCALIZED_DOMAIN);
+                $cells['url']['laemmi_comment'] = $comment;
+            }
         }
 
         return $cells;
     }
-
-    /**
-     * Yourls filter admin_list_where
-     *
-     * @return string
-     */
-//    public function filter_admin_list_where()
-//    {
-//        list($where) = func_get_args();
-//
-//        $permissions = $this->helperGetAllowedPermissions();
-//
-//        if(! isset($permissions[self::PERMISSION_LIST_SHOW])) {
-//            $or = [
-//                self::SETTING_URL_USER_CREATE . " IS NULL",
-//                self::SETTING_URL_USER_CREATE . " = '" . YOURLS_USER . "'"
-//            ];
-//
-//            $where .= " AND (" . implode(' OR ', $or) . ")";
-//        }
-//
-//        return $where;
-//    }
 
     ####################################################################################################################
 
@@ -351,9 +356,38 @@ class Plugin extends AbstractDefault
      */
     private function getHtmlFields(array $options = [])
     {
-        $html = '<div class="laemmi_form_field"><label>' . yourls__('Comment', self::LOCALIZED_DOMAIN) . ':</label> <textarea name="comment" rows="5">' . $options['comment'] . '</textarea></div>';
-        $html .= '<div class="laemmi_form_field"><label>' . yourls__('Label', self::LOCALIZED_DOMAIN) . ':</label> <input class="text" type="text" name="label" placeholder="' . yourls__('Add labels comma separated', self::LOCALIZED_DOMAIN) . '" value="' . $options['label'] . '" /></div>';
+        $permissions = $this->helperGetAllowedPermissions();
+
+        $html = '';
+        if(isset($permissions[self::PERMISSION_ACTION_EDIT_COMMENT])) {
+            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Comment', self::LOCALIZED_DOMAIN) . ':</label> <textarea name="comment" rows="5">' . $options['comment'] . '</textarea></div>';
+        }
+        if(isset($permissions[self::PERMISSION_ACTION_EDIT_LABEL])) {
+            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Label', self::LOCALIZED_DOMAIN) . ':</label> <input class="text" type="text" name="label" placeholder="' . yourls__('Add labels comma separated', self::LOCALIZED_DOMAIN) . '" value="' . $options['label'] . '" /></div>';
+        }
 
         return $html;
+    }
+
+    /**
+     * Get allowed permissions
+     *
+     * @return array
+     */
+    private function helperGetAllowedPermissions()
+    {
+        if($this->getSession('login', 'easy_ldap')) {
+            $inter = array_intersect_key($this->_options['allowed_groups'], $this->getSession('groups', 'easy_ldap'));
+            $permissions = [];
+            foreach ($inter as $val) {
+                foreach ($val as $_val) {
+                    $permissions[$_val] = $_val;
+                }
+            }
+        } else {
+            $permissions = array_combine($this->_adminpermission, $this->_adminpermission);
+        }
+
+        return $permissions;
     }
 }
