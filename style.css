@@ -1,0 +1,71 @@
+
+
+#new_url {
+    text-align: left;
+}
+
+#new_url textarea,
+#new_url input {
+    padding: 5px;
+}
+
+td.actions .button_laemmi_edit_comment_label {
+    background: transparent url(comment-edit-icon16x16.png) 2px center no-repeat;
+}
+
+.laemmi_form_field textarea,
+.laemmi_form_field input {
+    width: 33%;
+    margin: 0;
+    padding: 5px;
+}
+
+.laemmi_form_field {
+    padding: 0;
+    background: transparent;
+    margin: 10px 0;
+}
+
+.laemmi_form_field label {
+    display: block;
+    float: left;
+    width: 15%;
+
+    font-weight: bold;
+}
+
+.laemmi_label {
+    margin-top: 3px;
+}
+
+.laemmi_label span {
+    display: inline-block;
+    background-color: white;
+    border: 1px solid #88c0eb;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    padding: 3px 4px;
+    margin: 0 2px 0 0;
+}
+
+.laemmi_comment {
+    margin: 3px 0 0 0;
+}
+
+.laemmi_comment dt,
+.laemmi_comment dd {
+    margin: 0;
+}
+
+.laemmi_comment dd {
+    display: none;
+    padding: 3px;
+    margin-top: 3px;
+    background-color: white;
+    border: 1px solid lightgray;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
