@@ -32,6 +32,12 @@
   textarea, input {
     padding: 5px;
   }
+
+  .laemmi_form_field {
+    margin-top: 5px;
+    padding: 0;
+    background: transparent;
+  }
 }
 
 td.actions {
@@ -41,9 +47,7 @@ td.actions {
 }
 
 .laemmi_form_field {
-  padding: 0;
-  background: transparent;
-  margin: 10px 0;
+  margin: 0 0 5px 0;
 
   textarea, input {
     width: 33%;
