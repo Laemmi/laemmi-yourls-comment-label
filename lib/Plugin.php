@@ -155,18 +155,8 @@ class Plugin extends AbstractDefault
      */
     public function action_html_head()
     {
-        echo '<script>' . file_get_contents(YOURLS_PLUGINDIR . '/' . self::LOCALIZED_DOMAIN . '/admin.js') . '</script>';
-
-        $css = file_get_contents(YOURLS_PLUGINDIR . '/' . self::LOCALIZED_DOMAIN . '/style.css');
-        $css = preg_replace_callback("/url\((.*?)\)/", function($matches) {
-            $file = YOURLS_PLUGINDIR . '/' . self::LOCALIZED_DOMAIN . '/' . $matches[1];
-            if(! is_file($file)) {
-                return;
-            }
-            return 'url(data:'.mime_content_type($file).';base64,'.base64_encode(file_get_contents($file)).')';
-        }, $css);
-
-        echo '<style>' . $css . '</style>';
+        echo $this->getJsScript('assets/admin.js');
+        echo $this->getCssStyle();
     }
 
     /**
@@ -332,7 +322,7 @@ class Plugin extends AbstractDefault
         if(isset($permissions[self::PERMISSION_LIST_SHOW_COMMENT])) {
             $comment = trim($url_result->{self::SETTING_URL_COMMENT});
             if($comment) {
-                $cells['url']['template'] .= '<dl class="laemmi_comment"><dt><a href="#">%laemmi_comment_title%</a></dt><dd>%laemmi_comment%</dd></dl>';
+                $cells['url']['template'] .= '<div class="laemmi_comment"><dl><dt><a href="#">%laemmi_comment_title%</a></dt><dd>%laemmi_comment%</dd></dl></div>';
                 $cells['url']['laemmi_comment_title'] = yourls__('Comment', self::LOCALIZED_DOMAIN);
                 $cells['url']['laemmi_comment'] = $comment;
             }

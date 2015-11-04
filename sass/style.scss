@@ -1,0 +1,102 @@
+/*
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ * IN THE SOFTWARE.
+ *
+ * @category  laemmi-yourls-comment-label
+ * @package   style.scss
+ * @author    Michael Lämmlein <ml@spacerabbit.de>
+ * @copyright ©2015 laemmi
+ * @license   http://www.opensource.org/licenses/mit-license.php MIT-License
+ * @version   1.0
+ * @since     04.11.15
+*/
+
+#new_url {
+  text-align: left;
+
+  textarea, input {
+    padding: 5px;
+  }
+}
+
+td.actions {
+  .button_laemmi_edit_comment_label {
+    background: transparent url(assets/comment-edit-icon16x16.png) 2px center no-repeat;
+  }
+}
+
+.laemmi_form_field {
+  padding: 0;
+  background: transparent;
+  margin: 10px 0;
+
+  textarea, input {
+    width: 33%;
+    margin: 0;
+    padding: 5px;
+  }
+
+  label {
+    display: block;
+    float: left;
+    width: 15%;
+    font-weight: bold;
+  }
+}
+
+#main_table {
+  .url {
+    div {
+      margin-bottom: 3px;
+    }
+
+    .laemmi_label {
+      span {
+        display: inline-block;
+        background-color: white;
+        border: 1px solid #88c0eb;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        padding: 3px 4px;
+        margin: 0 2px 0 0;
+      }
+    }
+
+    .laemmi_comment {
+      dl {
+        margin: 0;
+
+        dt, dd {
+          margin: 0;
+        }
+
+        dd {
+          display: none;
+          padding: 3px;
+          margin-top: 3px;
+          background-color: white;
+          border: 1px solid lightgray;
+          -moz-border-radius: 3px;
+          -webkit-border-radius: 3px;
+          border-radius: 3px;
+        }
+      }
+    }
+  }
+}
