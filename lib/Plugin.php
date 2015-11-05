@@ -152,11 +152,17 @@ class Plugin extends AbstractDefault
 
     /**
      * Action: html_head
+     *
+     * @param array $args
      */
-    public function action_html_head()
+    public function action_html_head(array $args)
     {
-        echo $this->getJsScript('assets/admin.js');
-        echo $this->getCssStyle();
+        list($context) = $args;
+
+        if('index' === $context) {
+            echo $this->getJsScript('assets/admin.js');
+            echo $this->getCssStyle();
+        }
     }
 
     /**
@@ -297,6 +303,11 @@ class Plugin extends AbstractDefault
         return $actions;
     }
 
+    /**
+     * Filter: table_add_row_cell_array
+     *
+     * @return mixed
+     */
     public function filter_table_add_row_cell_array()
     {
         global $url_result;
@@ -312,7 +323,6 @@ class Plugin extends AbstractDefault
         if(isset($permissions[self::PERMISSION_LIST_SHOW_LABEL])) {
             $label = json_decode($url_result->{self::SETTING_URL_LABEL}, true);
             $label = @implode('</span><span>', $label);
-
             if ($label) {
                 $cells['url']['template'] .= '<div class="laemmi_label"><span>%laemmi_label%</span></div>';
                 $cells['url']['laemmi_label'] = $label;
