@@ -42,9 +42,9 @@ use Laemmi\Yourls\Plugin\AbstractDefault;
 class Plugin extends AbstractDefault
 {
     /**
-     * Localization domain
+     * Namespace
      */
-    const LOCALIZED_DOMAIN = 'laemmi-yourls-comment-label';
+    const APP_NAMESPACE = 'laemmi-yourls-comment-label';
 
     /**
      * Settings constants
@@ -109,7 +109,7 @@ class Plugin extends AbstractDefault
      */
     public function action_plugins_loaded()
     {
-        yourls_load_custom_textdomain(self::LOCALIZED_DOMAIN, realpath(dirname( __FILE__ ) . '/../translations'));
+        yourls_load_custom_textdomain(self::APP_NAMESPACE, realpath(dirname( __FILE__ ) . '/../translations'));
     }
 
     /**
@@ -122,7 +122,7 @@ class Plugin extends AbstractDefault
     {
         list($plugin) = $args;
 
-        if(false === stripos($plugin, self::LOCALIZED_DOMAIN)) {
+        if(false === stripos($plugin, self::APP_NAMESPACE)) {
             return;
         }
 
@@ -141,7 +141,7 @@ class Plugin extends AbstractDefault
     {
         list($plugin) = $args;
 
-        if(false === stripos($plugin, self::LOCALIZED_DOMAIN)) {
+        if(false === stripos($plugin, self::APP_NAMESPACE)) {
             return;
         }
 
@@ -261,7 +261,7 @@ class Plugin extends AbstractDefault
 
         $return = [];
         $return['status']  = 'success';
-        $return['message'] = yourls__('Link updated in database', self::LOCALIZED_DOMAIN);
+        $return['message'] = yourls__('Link updated in database', self::APP_NAMESPACE);
 
         echo json_encode($return);
     }
@@ -295,7 +295,7 @@ class Plugin extends AbstractDefault
         $actions['laemmi_edit_comment_label'] = [
                 'href' => $href,
                 'id' => '',
-                'title' => yourls__('Edit comment & label', self::LOCALIZED_DOMAIN),
+                'title' => yourls__('Edit comment & label', self::APP_NAMESPACE),
                 'anchor' => 'edit_comment_label',
                 'onclick' => ''
         ];
@@ -333,7 +333,7 @@ class Plugin extends AbstractDefault
             $comment = trim($url_result->{self::SETTING_URL_COMMENT});
             if($comment) {
                 $cells['url']['template'] .= '<div class="laemmi_comment"><dl><dt><a href="#">%laemmi_comment_title%</a></dt><dd>%laemmi_comment%</dd></dl></div>';
-                $cells['url']['laemmi_comment_title'] = yourls__('Comment', self::LOCALIZED_DOMAIN);
+                $cells['url']['laemmi_comment_title'] = yourls__('Comment', self::APP_NAMESPACE);
                 $cells['url']['laemmi_comment'] = $comment;
             }
         }
@@ -355,10 +355,10 @@ class Plugin extends AbstractDefault
 
         $html = '';
         if(isset($permissions[self::PERMISSION_ACTION_EDIT_COMMENT])) {
-            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Comment', self::LOCALIZED_DOMAIN) . ':</label> <textarea name="comment" rows="5">' . $options['comment'] . '</textarea></div>';
+            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Comment', self::APP_NAMESPACE) . ':</label> <textarea name="comment" rows="5">' . $options['comment'] . '</textarea></div>';
         }
         if(isset($permissions[self::PERMISSION_ACTION_EDIT_LABEL])) {
-            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Label', self::LOCALIZED_DOMAIN) . ':</label> <input class="text" type="text" name="label" placeholder="' . yourls__('Add labels comma separated', self::LOCALIZED_DOMAIN) . '" value="' . $options['label'] . '" /></div>';
+            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Label', self::APP_NAMESPACE) . ':</label> <input class="text" type="text" name="label" placeholder="' . yourls__('Add labels comma separated', self::APP_NAMESPACE) . '" value="' . $options['label'] . '" /></div>';
         }
 
         return $html;
@@ -371,8 +371,8 @@ class Plugin extends AbstractDefault
      */
     private function helperGetAllowedPermissions()
     {
-        if($this->getSession('login', 'easy_ldap')) {
-            $inter = array_intersect_key($this->_options['allowed_groups'], $this->getSession('groups', 'easy_ldap'));
+        if($this->getSession('login', 'laemmi-yourls-easy-ldap')) {
+            $inter = array_intersect_key($this->_options['allowed_groups'], $this->getSession('groups', 'laemmi-yourls-easy-ldap'));
             $permissions = [];
             foreach ($inter as $val) {
                 foreach ($val as $_val) {
