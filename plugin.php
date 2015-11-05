@@ -49,6 +49,8 @@ if (!yourls_is_API()) {
             'allowed_groups' => defined('LAEMMI_EASY_LDAP_ALLOWED_GROUPS') ? json_decode(LAEMMI_EASY_LDAP_ALLOWED_GROUPS, true) : [],
         ]);
     } else {
-        echo 'Please install "laemmi-yourls-default-tools" first!';
+        if('activate' === (isset($_GET['action']) ? $_GET['action'] : null) && 'laemmi-yourls-comment-label' === $_GET['plugin']) {
+            echo 'Please install "laemmi-yourls-default-tools" first!';
+        }
     }
 }
