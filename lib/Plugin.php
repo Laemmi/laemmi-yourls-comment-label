@@ -310,18 +310,13 @@ class Plugin extends AbstractDefault
      */
     public function filter_table_add_row_cell_array()
     {
-        global $url_result;
-
         list($cells, $keyword, $url, $title, $ip, $clicks, $timestamp) = func_get_args();
-
-        if(!isset($url_result)) {
-            return $cells;
-        }
 
         $permissions = $this->helperGetAllowedPermissions();
 
         if(isset($permissions[self::PERMISSION_LIST_SHOW_LABEL])) {
-            $label = json_decode($url_result->{self::SETTING_URL_LABEL}, true);
+            $infos = yourls_get_keyword_infos($keyword);
+            $label = json_decode($infos[self::SETTING_URL_LABEL], true);
             $label = @implode('</span><span>', $label);
             if ($label) {
                 $cells['url']['template'] .= '<div class="laemmi_label"><span>%laemmi_label%</span></div>';
@@ -330,7 +325,8 @@ class Plugin extends AbstractDefault
         }
 
         if(isset($permissions[self::PERMISSION_LIST_SHOW_COMMENT])) {
-            $comment = trim($url_result->{self::SETTING_URL_COMMENT});
+            $infos = yourls_get_keyword_infos($keyword);
+            $comment = trim($infos[self::SETTING_URL_COMMENT]);
             if($comment) {
                 $cells['url']['template'] .= '<div class="laemmi_comment"><dl><dt><a href="#">%laemmi_comment_title%</a></dt><dd>%laemmi_comment%</dd></dl></div>';
                 $cells['url']['laemmi_comment_title'] = yourls__('Comment', self::APP_NAMESPACE);
