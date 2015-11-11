@@ -77,13 +77,13 @@ $(function() {
 
     // Add fields to add form
     $.post(ajaxurl, {'action': 'laemmi_edit_comment_label_getfields'}, function(data) {
-        $("#new_url_form #add-button")
+        $("#new_url #new_url_form #add-button")
             .before(data);
     });
 
     // Prepare some hidden fields
-    $("#new_url_form").append('<input type="hidden" name="action" value="add">');
-    $("#nonce-add").clone().appendTo('#new_url_form').attr('name', 'nonce').removeAttr('id');
+    $("#new_url #new_url_form").append('<input type="hidden" name="action" value="add">');
+    $("#new_url #nonce-add").clone().appendTo('#new_url_form').attr('name', 'nonce').removeAttr('id');
 
     // Submit add form
     $("#add-button").click(function(e) {
@@ -107,7 +107,7 @@ $(function() {
                     $('#nourl_found').css('display', 'none');
                     zebra_table();
                     increment_counter();
-                    toggle_share_fill_boxes( data.url.url, data.shorturl, data.url.title );
+                    toggle_share_fill_boxes(data.url.url, data.shorturl, data.url.title);
                     break;
             }
 
