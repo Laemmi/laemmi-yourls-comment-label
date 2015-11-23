@@ -1,0 +1,14 @@
+{
+  "name": "laemmi/laemmi-yourls-comment-label",
+  "type": "library",
+  "description": "Plugin for YOURLS. Add comment and labels for url entry.",
+  "keywords": ["yourls","plugin","comment","labels"],
+  "homepage": "https://github.com/laemmi/laemmi-yourls-comment-label",
+  "license": "MIT",
+  "authors": [{
+    "name": "Michael Lämmlein",
+    "email": "laemmi@spacerabbit.de",
+    "homepage": "http://www.spacerabbit.de",
+    "role": "Developer"
+  }]
+}
