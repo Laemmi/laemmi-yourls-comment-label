@@ -1,6 +1,6 @@
 {
   "name": "laemmi/laemmi-yourls-comment-label",
-  "type": "library",
+  "type": "yourls-plugin",
   "description": "Plugin for YOURLS. Add comment and labels for url entry.",
   "keywords": ["yourls","plugin","comment","labels"],
   "homepage": "https://github.com/laemmi/laemmi-yourls-comment-label",
