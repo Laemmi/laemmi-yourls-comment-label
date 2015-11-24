@@ -12,6 +12,13 @@ You must install "laemmi-yourls-default-tools" fist.
 * Via git goto /users/plugins and type git clone https://github.com/Laemmi/laemmi-yourls-comment-label.git
 * Add config values to config file
 * Go to the YOURLS Plugins administration page and activate the plugin.
+* Install via composer
+
+```
+  "require":{
+    "laemmi/laemmi-yourls-comment-label": "dev-master"
+  }
+```
 
 ### Available config values
 #### Allowed ldap groupsnames with yourls action and list permissions
