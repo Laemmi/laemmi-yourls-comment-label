@@ -10,5 +10,9 @@
     "email": "laemmi@spacerabbit.de",
     "homepage": "http://www.spacerabbit.de",
     "role": "Developer"
-  }]
+  }],
+
+  "require": {
+    "laemmi/composer-installer": "dev-master"
+  }
 }
