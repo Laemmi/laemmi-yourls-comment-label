@@ -12,11 +12,9 @@
     "role": "Developer"
   }],
 
-  "require": {
-    "laemmi/composer-installer": "dev-master"
-  },
+  "minimum-stability": "dev",
 
-  "require-dev": {
+  "require": {
     "laemmi/composer-installer": "dev-master"
   }
 }
