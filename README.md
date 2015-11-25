@@ -15,7 +15,7 @@ You must install "laemmi-yourls-default-tools" fist.
 * Install via composer. Add following to composer.json in require section.
 ```json
   "require":{
-    "laemmi/laemmi-yourls-comment-label": "dev-master"
+    "laemmi/laemmi-yourls-comment-label": "^1.0"
   }
 ```
 
