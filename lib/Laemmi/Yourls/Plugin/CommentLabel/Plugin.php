@@ -30,14 +30,14 @@
 /**
  * Namespace
  */
-namespace Laemmi\Yourls\Comment\Label;
+namespace Laemmi\Yourls\Plugin\CommentLabel;
 
 use Laemmi\Yourls\Plugin\AbstractDefault;
 
 /**
  * Class Plugin
  *
- * @package Laemmi\Yourls\Comment\Label
+ * @package Laemmi\Yourls\Plugin\CommentLabel
  */
 class Plugin extends AbstractDefault
 {
@@ -109,7 +109,7 @@ class Plugin extends AbstractDefault
      */
     public function action_plugins_loaded()
     {
-        yourls_load_custom_textdomain(self::APP_NAMESPACE, realpath(dirname( __FILE__ ) . '/../translations'));
+        $this->loadTextdomain();
     }
 
     /**

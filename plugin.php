@@ -43,8 +43,8 @@ if(!defined('YOURLS_ABSPATH'))die();
 if (!yourls_is_API()) {
     // Check if AbstractDefault class exists
     if(class_exists('Laemmi\Yourls\Plugin\AbstractDefault')) {
-        require_once 'lib/Plugin.php';
-        new Laemmi\Yourls\Comment\Label\Plugin([
+        require_once 'lib/Laemmi/Yourls/Plugin/CommentLabel/Plugin.php';
+        new Laemmi\Yourls\Plugin\CommentLabel\Plugin([
             'db' => $ydb,
             'allowed_groups' => defined('LAEMMI_EASY_LDAP_ALLOWED_GROUPS') ? json_decode(LAEMMI_EASY_LDAP_ALLOWED_GROUPS, true) : [],
         ]);
