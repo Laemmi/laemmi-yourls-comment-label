@@ -12,9 +12,8 @@ You must install "laemmi-yourls-default-tools" fist.
 * Via git goto /users/plugins and type git clone https://github.com/Laemmi/laemmi-yourls-comment-label.git
 * Add config values to config file
 * Go to the YOURLS Plugins administration page and activate the plugin.
-* Install via composer
-
-```
+* Install via composer. Add following to composer.json in require section.
+```json
   "require":{
     "laemmi/laemmi-yourls-comment-label": "dev-master"
   }
@@ -22,9 +21,11 @@ You must install "laemmi-yourls-default-tools" fist.
 
 ### Available config values
 #### Allowed ldap groupsnames with yourls action and list permissions
+```php
 define('LAEMMI_EASY_LDAP_ALLOWED_GROUPS', json_encode([
     'MY-LDAP-GROUPNAME' => ['action-edit-comment', 'action-edit-label', 'list-show-comment', 'list-show-label']
 ]));
+```
 
 ### Permissions
 ##### Actions
