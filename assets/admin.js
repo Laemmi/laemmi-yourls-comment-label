@@ -29,7 +29,7 @@
 $(function() {
 
     // Edit button, show form
-    $(".button_laemmi_edit_comment_label").click(function(e) {
+    $('#main_table').on('click', '.button_laemmi_edit_comment_label', function(e) {
         e.preventDefault();
         var self = $(this);
         if(self.hasClass('disabled')) {
@@ -103,7 +103,8 @@ $(function() {
         $.post(ajaxurl, form.serialize(), function(data) {
             switch (data.status) {
                 case 'success':
-                    $('#main_table tbody').prepend( data.html ).trigger("update");
+                    //$('#main_table tbody').prepend(data.html).trigger("update");
+                    $('#main_table #TableTitle').after(data.html).trigger("update");
                     $('#nourl_found').css('display', 'none');
                     zebra_table();
                     increment_counter();
@@ -111,7 +112,8 @@ $(function() {
                     break;
             }
 
-            form.trigger("reset");
+            //form.trigger("reset");
+            add_link_reset();
             end_loading("#add-button");
             end_disable("#add-button");
             feedback(data.message, data.status);

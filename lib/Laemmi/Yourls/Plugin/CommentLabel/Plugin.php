@@ -285,6 +285,10 @@ class Plugin extends AbstractDefault
 
         global $keyword;
 
+        if(!$keyword) {
+            return $actions;
+        }
+
         $id = yourls_string2htmlid($keyword);
 
         $href = yourls_nonce_url(
