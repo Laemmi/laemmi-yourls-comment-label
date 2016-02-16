@@ -92,6 +92,13 @@ class Plugin extends AbstractDefault
     ];
 
     /**
+     * Keyword
+     *
+     * @var null
+     */
+    private $_keyword = null;
+
+    /**
      * Constructor
      *
      * @param array $options
@@ -269,6 +276,20 @@ class Plugin extends AbstractDefault
     ####################################################################################################################
 
     /**
+     * Filter yourls_link
+     *
+     * @return mixed
+     */
+    public function filter_yourls_link()
+    {
+        list($link, $keyword) = func_get_args();
+
+        $this->_keyword = $keyword;
+
+        return $link;
+    }
+
+    /**
      * Filter table_add_row_action_array
      *
      * @return mixed
@@ -283,17 +304,11 @@ class Plugin extends AbstractDefault
             return $actions;
         }
 
-        global $keyword;
-
-        if(!$keyword) {
-            return $actions;
-        }
-
-        $id = yourls_string2htmlid($keyword);
+        $id = yourls_string2htmlid($this->_keyword);
 
         $href = yourls_nonce_url(
             'laemmi_edit_comment_label_' . $id,
-            yourls_add_query_arg(['action' => 'laemmi_edit_comment_label', 'keyword' => $keyword], yourls_admin_url('admin-ajax.php'))
+            yourls_add_query_arg(['action' => 'laemmi_edit_comment_label', 'keyword' => $this->_keyword], yourls_admin_url('admin-ajax.php'))
         );
 
         $actions['laemmi_edit_comment_label'] = [
