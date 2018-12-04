@@ -104,7 +104,6 @@ class Plugin extends AbstractDefault
     public function init()
     {
         $this->startSession();
-        parent::__construct();
         $this->initTemplate();
     }
 

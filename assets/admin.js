@@ -103,11 +103,10 @@ $(function() {
                     zebra_table();
                     increment_counter();
                     toggle_share_fill_boxes(data.url.url, data.shorturl, data.url.title);
+                    add_link_reset();
                     break;
             }
 
-            //form.trigger("reset");
-            add_link_reset();
             end_loading("#add-button");
             end_disable("#add-button");
             feedback(data.message, data.status);
