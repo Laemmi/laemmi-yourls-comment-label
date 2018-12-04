@@ -75,12 +75,6 @@ $(function() {
 
     // #################################################################################################################
 
-    // Add fields to add form
-    $.post(ajaxurl, {'action': 'laemmi_edit_comment_label_getfields'}, function(data) {
-        $("#new_url #new_url_form #add-button")
-            .before(data);
-    });
-
     // Prepare some hidden fields
     $("#new_url #new_url_form").append('<input type="hidden" name="action" value="add">');
     $("#new_url #nonce-add").clone().appendTo('#new_url_form').attr('name', 'nonce').removeAttr('id');

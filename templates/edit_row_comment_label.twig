@@ -1,0 +1,26 @@
+<tr id="edit-{{ id }}" class="edit-row laemmi_edit_comment_label_row" data-id="{{ id }}">
+    <td colspan="5">
+        <form action="admin-ajax.php" method="post">
+            <input type="hidden" name="action" value="laemmi_edit_comment_label_save" />
+            <input type="hidden" name="keyword" value="{{ keyword }}" />
+            <input type="hidden" name="nonce" value="{{ nonce }}" />
+
+            {% if PERMISSION_ACTION_EDIT_COMMENT %}
+                <div class="form-group form-group-sm">
+                    <label>{{ yourls__('Comment') }}:</label>
+                    <textarea class="form-control" name="comment" rows="5">{{ comment }}</textarea>
+                </div>
+            {% endif %}
+            {% if PERMISSION_ACTION_EDIT_LABEL %}
+                <div class="form-group form-group-sm">
+                    <label>{{ yourls__('Label') }}:</label>
+                    <input class="form-control" type="text" name="label" placeholder="{{ yourls__('Add labels comma separated') }}" value="{{ label }}" />
+                </div>
+            {% endif %}
+        </form>
+    </td>
+    <td colspan="1" class="buttons">
+        <input class="btn btn-primary btn-sm" type="button" name="save" value="{{ yourls__('Save', 'default') }}">
+        <input class="btn btn-default btn-sm" type="button" name="cancel" value="{{ yourls__('Cancel', 'default') }}">
+    </td>
+</tr>

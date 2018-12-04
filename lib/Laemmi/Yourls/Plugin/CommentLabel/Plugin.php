@@ -99,14 +99,13 @@ class Plugin extends AbstractDefault
     private $_keyword = null;
 
     /**
-     * Constructor
-     *
-     * @param array $options
+     * Init
      */
-    public function __construct(array $options = [])
+    public function init()
     {
         $this->startSession();
-        parent::__construct($options);
+        parent::__construct();
+        $this->initTemplate();
     }
 
     ####################################################################################################################
@@ -211,15 +210,6 @@ class Plugin extends AbstractDefault
     }
 
     /**
-     * Action yourls_ajax_laemmi_edit_comment_label_getfields
-     */
-    public function action_yourls_ajax_laemmi_edit_comment_label_getfields()
-    {
-        $html = $this->getHtmlFields(['comment' => '', 'label' => '']);
-        echo json_encode($html);
-    }
-
-    /**
      * Action yourls_ajax_laemmi_edit_comment_label
      */
     public function action_yourls_ajax_laemmi_edit_comment_label()
@@ -237,18 +227,15 @@ class Plugin extends AbstractDefault
         $label = json_decode($infos[self::SETTING_URL_LABEL], true);
         $label = implode(',', $label);
 
-        $html = '
-        <tr id="edit-' . $id . '" class="edit-row laemmi_edit_comment_label_row" data-id="' . $id . '"><td colspan="5">
-        <form action="admin-ajax.php" method="post">
-        <input type="hidden" name="action" value="laemmi_edit_comment_label_save" />
-        <input type="hidden" name="keyword" value="' . $keyword . '" />
-        <input type="hidden" name="nonce" value="' . $nonce . '" />';
-        $html .= $this->getHtmlFields(['comment' => $comment, 'label' => $label]);
-        $html .= '</form>
-        </td><td colspan="1">
-        <input class="button" type="button" name="save" value="' . yourls__('Save') . '">
-        <input class="button" type="button" name="cancel" value="' . yourls__('Cancel') . '">
-        </td></tr>';
+        $html = $this->getTemplate()->render('edit_row_comment_label', [
+            'keyword' => $keyword,
+            'nonce' => $nonce,
+            'id' => $id,
+            'comment' => $comment,
+            'label' => $label,
+            'PERMISSION_ACTION_EDIT_COMMENT' => $this->_hasPermission(self::PERMISSION_ACTION_EDIT_COMMENT),
+            'PERMISSION_ACTION_EDIT_LABEL' => $this->_hasPermission(self::PERMISSION_ACTION_EDIT_LABEL),
+        ]);
 
         echo json_encode(['html' => $html]);
     }
@@ -354,28 +341,5 @@ class Plugin extends AbstractDefault
         }
 
         return $cells;
-    }
-
-    ####################################################################################################################
-
-    /**
-     * Returns the html fields for form
-     *
-     * @param array $options
-     * @return string
-     */
-    private function getHtmlFields(array $options = [])
-    {
-        $permissions = $this->helperGetAllowedPermissions();
-
-        $html = '';
-        if(isset($permissions[self::PERMISSION_ACTION_EDIT_COMMENT])) {
-            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Comment', self::APP_NAMESPACE) . ':</label> <textarea name="comment" rows="5">' . $options['comment'] . '</textarea></div>';
-        }
-        if(isset($permissions[self::PERMISSION_ACTION_EDIT_LABEL])) {
-            $html .= '<div class="laemmi_form_field"><label>' . yourls__('Label', self::APP_NAMESPACE) . ':</label> <input class="text" type="text" name="label" placeholder="' . yourls__('Add labels comma separated', self::APP_NAMESPACE) . '" value="' . $options['label'] . '" /></div>';
-        }
-
-        return $html;
     }
 }
