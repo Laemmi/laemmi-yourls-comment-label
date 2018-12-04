@@ -1,0 +1,30 @@
+{
+  "name": "laemmi-yourls-comment-label",
+  "version": "1.0.0",
+  "description": "Add comment and labels for url entry",
+  "main": "Gruntfile.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-contrib-sass": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laemmi/laemmi-yourls-comment-label.git"
+  },
+  "keywords": [
+    "yourls"
+  ],
+  "author": "Michael Lämmlein",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Laemmi/laemmi-yourls-comment-label/issues"
+  },
+  "homepage": "https://github.com/Laemmi/laemmi-yourls-comment-label#readme"
+}

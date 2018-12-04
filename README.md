@@ -1,7 +1,7 @@
 # laemmi-yourls-comment-label
 Plugin for YOURLS 1.7
 
-##Description
+## Description
 Add comment and labels for url entry. Localization for german.
 Use this plugin with "laemmi-yourls-easy-ldap" plugin.
 You must install "laemmi-yourls-default-tools" fist.
