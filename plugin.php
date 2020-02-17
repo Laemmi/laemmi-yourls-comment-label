@@ -3,7 +3,7 @@
 Plugin Name: laemmi´s comment and label
 Plugin URI: https://github.com/Laemmi/laemmi-yourls-comment-label
 Description: Comment and labels for url
-Version: 1.0
+Version: 1.0.2
 Author: laemmi
 Author URI: https://github.com/Laemmi
 Copyright 2015 laemmi
@@ -29,27 +29,28 @@ Copyright 2015 laemmi
  * IN THE SOFTWARE.
  *
  * @category    laemmi-yourls-comment-label
- * @package     plugin.php
- * @author      Michael Lämmlein <ml@spacerabbit.de>
+ * @author      Michael Lämmlein <laemmi@spacerabbit.de>
  * @copyright   ©2015 laemmi
  * @license     http://www.opensource.org/licenses/mit-license.php MIT-License
- * @version     1.0.0
+ * @version     1.0.2
  * @since       23.10.15
  */
 
+use Laemmi\Yourls\Plugin\CommentLabel\Plugin;
+
 // No direct call
-if(!defined('YOURLS_ABSPATH'))die();
+if (!defined('YOURLS_ABSPATH'))die();
 
 if (!yourls_is_API()) {
     // Check if AbstractDefault class exists
-    if(class_exists('Laemmi\Yourls\Plugin\AbstractDefault')) {
-        require_once 'lib/Laemmi/Yourls/Plugin/CommentLabel/Plugin.php';
-        new Laemmi\Yourls\Plugin\CommentLabel\Plugin([
+    if (class_exists('Laemmi\Yourls\Plugin\AbstractDefault')) {
+        require_once __DIR__ . '/lib/Plugin.php';
+        new Plugin([
             'db' => $ydb,
             'allowed_groups' => defined('LAEMMI_EASY_LDAP_ALLOWED_GROUPS') ? json_decode(LAEMMI_EASY_LDAP_ALLOWED_GROUPS, true) : [],
         ]);
     } else {
-        if('activate' === (isset($_GET['action']) ? $_GET['action'] : null) && 'laemmi-yourls-comment-label' === $_GET['plugin']) {
+        if ('activate' === (isset($_GET['action']) ? $_GET['action'] : null) && 'laemmi-yourls-comment-label' === $_GET['plugin']) {
             echo 'Please install "laemmi-yourls-default-tools" first!';
         }
     }

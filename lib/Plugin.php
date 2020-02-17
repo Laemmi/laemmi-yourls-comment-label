@@ -18,12 +18,11 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  *
- * @category    Laemmi\Yourls\Comment\Label
- * @package     Laemmi\Yourls\Comment\Label
- * @author      Michael Lämmlein <ml@spacerabbit.de>
+ * @category    laemmi-yourls-comment-label
+ * @author      Michael Lämmlein <laemmi@spacerabbit.de>
  * @copyright   ©2015 laemmi
  * @license     http://www.opensource.org/licenses/mit-license.php MIT-License
- * @version     1.0.0
+ * @version     1.0.2
  * @since       23.10.15
  */
 
@@ -34,11 +33,6 @@ namespace Laemmi\Yourls\Plugin\CommentLabel;
 
 use Laemmi\Yourls\Plugin\AbstractDefault;
 
-/**
- * Class Plugin
- *
- * @package Laemmi\Yourls\Plugin\CommentLabel
- */
 class Plugin extends AbstractDefault
 {
     /**
@@ -125,13 +119,13 @@ class Plugin extends AbstractDefault
      */
     public function action_activated_plugin(array $args)
     {
-        list($plugin) = $args;
+        list ($plugin) = $args;
 
-        if(false === stripos($plugin, self::APP_NAMESPACE)) {
+        if (false === stripos($plugin, self::APP_NAMESPACE)) {
             return;
         }
 
-        foreach($this->_setting_url as $key => $val) {
+        foreach ($this->_setting_url as $key => $val) {
             $this->addUrlSetting($key, $val);
         }
     }
@@ -144,15 +138,11 @@ class Plugin extends AbstractDefault
      */
     public function action_deactivated_plugin(array $args)
     {
-        list($plugin) = $args;
+        list ($plugin) = $args;
 
-        if(false === stripos($plugin, self::APP_NAMESPACE)) {
+        if (false === stripos($plugin, self::APP_NAMESPACE)) {
             return;
         }
-
-//        foreach($this->_setting_url as $key => $val) {
-//            $this->dropUrlSetting($key, $val);
-//        }
     }
 
     /**
@@ -162,9 +152,9 @@ class Plugin extends AbstractDefault
      */
     public function action_html_head(array $args)
     {
-        list($context) = $args;
+        list ($context) = $args;
 
-        if('index' === $context) {
+        if ('index' === $context) {
             echo $this->getJsScript('assets/admin.js');
             echo $this->getCssStyle();
         }
@@ -178,18 +168,16 @@ class Plugin extends AbstractDefault
      */
     public function action_insert_link(array $args)
     {
-        list($insert, $url, $keyword, $title, $timestamp, $ip) = $args;
-
-        $permissions = $this->helperGetAllowedPermissions();
+        list ($insert, $url, $keyword, $title, $timestamp, $ip) = $args;
 
         $data = [];
 
-        if(isset($permissions[self::PERMISSION_ACTION_EDIT_COMMENT])) {
+        if ($this->_hasPermission(self::PERMISSION_ACTION_EDIT_COMMENT)) {
             $comment = $this->getRequest('comment');
             $data[self::SETTING_URL_COMMENT] = $comment;
         }
 
-        if(isset($permissions[self::PERMISSION_ACTION_EDIT_LABEL])) {
+        if ($this->_hasPermission(self::PERMISSION_ACTION_EDIT_LABEL)) {
             $label = $this->getRequest('label');
             $label = explode(',', $label);
             $label = array_map('trim', $label);
@@ -201,7 +189,7 @@ class Plugin extends AbstractDefault
             $data[self::SETTING_URL_LABEL] = $label;
         }
 
-        if(!$data) {
+        if (!$data) {
             return;
         }
 
@@ -268,7 +256,7 @@ class Plugin extends AbstractDefault
      */
     public function filter_yourls_link()
     {
-        list($link, $keyword) = func_get_args();
+        list ($link, $keyword) = func_get_args();
 
         $this->_keyword = $keyword;
 
@@ -282,11 +270,9 @@ class Plugin extends AbstractDefault
      */
     public function filter_table_add_row_action_array()
     {
-        list($actions) = func_get_args();
+        list ($actions) = func_get_args();
 
-        $permissions = $this->helperGetAllowedPermissions();
-
-        if(! isset($permissions[self::PERMISSION_ACTION_EDIT_COMMENT]) && ! isset($permissions[self::PERMISSION_ACTION_EDIT_LABEL])) {
+        if (!$this->_hasPermission(self::PERMISSION_ACTION_EDIT_COMMENT) && !$this->_hasPermission(self::PERMISSION_ACTION_EDIT_LABEL)) {
             return $actions;
         }
 
@@ -315,11 +301,9 @@ class Plugin extends AbstractDefault
      */
     public function filter_table_add_row_cell_array()
     {
-        list($cells, $keyword, $url, $title, $ip, $clicks, $timestamp) = func_get_args();
+        list ($cells, $keyword, $url, $title, $ip, $clicks, $timestamp) = func_get_args();
 
-        $permissions = $this->helperGetAllowedPermissions();
-
-        if(isset($permissions[self::PERMISSION_LIST_SHOW_LABEL])) {
+        if ($this->_hasPermission(self::PERMISSION_LIST_SHOW_LABEL)) {
             $infos = yourls_get_keyword_infos($keyword);
             $label = json_decode($infos[self::SETTING_URL_LABEL], true);
             $label = @implode('</span><span>', $label);
@@ -329,10 +313,10 @@ class Plugin extends AbstractDefault
             }
         }
 
-        if(isset($permissions[self::PERMISSION_LIST_SHOW_COMMENT])) {
+        if ($this->_hasPermission(self::PERMISSION_LIST_SHOW_COMMENT)) {
             $infos = yourls_get_keyword_infos($keyword);
             $comment = trim($infos[self::SETTING_URL_COMMENT]);
-            if($comment) {
+            if ($comment) {
                 $cells['url']['template'] .= '<div class="laemmi_comment"><dl><dt><a href="#">%laemmi_comment_title%</a></dt><dd>%laemmi_comment%</dd></dl></div>';
                 $cells['url']['laemmi_comment_title'] = yourls__('Comment', self::APP_NAMESPACE);
                 $cells['url']['laemmi_comment'] = $comment;
